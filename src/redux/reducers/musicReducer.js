@@ -1,22 +1,29 @@
+import { SEARCH_MUSIC_SUCCESS, SEARCH_MUSIC_FAILURE, TOGGLE_LIKE } from "../actions";
+
 const initialState = {
   searchQuery: "",
-  searchResults: [],
+  searchResults: [], // Inizializza come un array vuoto
   likedSongs: [],
+  loading: false,
 };
 
 const musicReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SEARCH_MUSIC_SUCCESS":
+    case SEARCH_MUSIC_SUCCESS:
       return {
         ...state,
-        searchResults: action.payload,
+        searchResults: action.payload, // Aggiorna i risultati della ricerca con i dati delle canzoni
+        loading: false, // Imposta loading a false poiché la ricerca è stata completata con successo
       };
 
-    case "SEARCH_MUSIC_FAILURE":
-      console.error("Errore nella ricerca delle canzoni:", action.payload);
-      return state;
+    case SEARCH_MUSIC_FAILURE:
+      return {
+        ...state,
+        searchResults: [], // Pulisci i risultati in caso di errore
+        loading: false, // Imposta loading a false a causa dell'errore
+      };
 
-    case "TOGGLE_LIKE":
+    case TOGGLE_LIKE:
       const songId = action.payload;
       const likedSongs = state.likedSongs.includes(songId)
         ? state.likedSongs.filter((id) => id !== songId)

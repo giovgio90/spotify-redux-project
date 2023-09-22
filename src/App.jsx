@@ -1,9 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
-import Main from "./components/Main";
-
 import NavBar from "./components/NavBar";
+import Main from "./components/Main";
 
 function App() {
   return (

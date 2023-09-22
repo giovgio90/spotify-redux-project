@@ -1,20 +1,38 @@
-import { Navbar, Nav, Button, FormControl, Col, Row, Container } from "react-bootstrap";
+import { Container, Row, Col, Navbar, Nav, Button, FormControl } from "react-bootstrap";
 import LogoSpotify from "../assets/logo/Spotify_Logo.png";
 import { HouseDoor, Book } from "react-bootstrap-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { searchMusic } from "../redux/actions/index";
+import { useState } from "react";
+import { useDispatch } from "react-redux"; // Aggiungi l'import di useDispatch
+import { searchMusicSuccess } from "../redux/actions";
 
 const NavBar = () => {
-  const dispatch = useDispatch();
-  const searchQuery = useSelector((state) => state.music.searchQuery); // Utilizza state.music.searchQuery
+  const [inputValue, setInputValue] = useState("");
+  const [setLoading] = useState(false);
+  const dispatch = useDispatch(); // Aggiungi l'import di useDispatch
 
-  const handleSearch = () => {
-    // Invia l'azione searchMusic con il valore di searchQuery
-    dispatch(searchMusic(searchQuery));
-  };
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://deezerdevs-deezer.p.rapidapi.com/search?q=${inputValue}`, {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key": "446acbbc21mshddea86ae7700867p1e29b9jsnd56234c5f0d5",
+          "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        },
+      });
 
-  const handleChange = (e) => {
-    dispatch({ type: "SEARCH_MUSIC", payload: e.target.value });
+      if (response.ok) {
+        const data = await response.json();
+        const songs = data.data;
+        dispatch(searchMusicSuccess(songs)); // Dispatch dell'azione per aggiornare lo stato Redux
+      } else {
+        console.error("Errore nella ricerca delle canzoni. Stato della risposta:", response.status);
+      }
+    } catch (error) {
+      console.error("Errore nella ricerca delle canzoni:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,10 +75,14 @@ const NavBar = () => {
                           placeholder="Search"
                           aria-label="Search"
                           aria-describedby="basic-addon2"
-                          value={searchQuery}
-                          onChange={handleChange}
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value)}
+                          onKeyUp={(e) => {
+                            if (e.key === "Enter") {
+                              handleSearch();
+                            }
+                          }}
                         />
-
                         <Button variant="outline-secondary" className="py-auto" size="sm" onClick={handleSearch}>
                           GO
                         </Button>
@@ -77,6 +99,13 @@ const NavBar = () => {
               <Button className="login-btn" type="button">
                 Login
               </Button>
+              {/* <Link to="/cookie-policy" className="link">
+                Cookie Policy
+              </Link>{" "}
+              |{" "}
+              <Link to="/privacy" className="link">
+                Privacy
+              </Link> */}
             </div>
           </Navbar>
         </Col>

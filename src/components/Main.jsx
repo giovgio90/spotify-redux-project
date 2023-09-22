@@ -1,35 +1,36 @@
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import SectionPlayer from "../components/SectionPlayer";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleLike } from "../redux/actions/index";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import { useSelector } from "react-redux"; // Rimuovi l'import di useDispatch
+import SectionPlayer from "./SectionPlayer";
+import { useEffect } from "react";
 
 const Main = () => {
-  const searchResults = useSelector((state) => state.searchResults);
-  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.music.loading);
+  const searchResults = useSelector((state) => state.music.searchResults); // Ottieni i risultati dalla store
+  const searchQuery = useSelector((state) => state.music.searchQuery);
 
-  const handleLike = (songId) => {
-    dispatch(toggleLike(songId));
-  };
+  useEffect(() => {
+    // La chiamata API è già gestita dal NavBar, quindi non è necessario fare nulla qui
+  }, [searchQuery]);
 
   return (
     <>
       <Container fluid>
-        <Row className="mb-3">{/* ... */}</Row>
-        <Row>
+        <Row className="mb-3">
           <Col md={3} className="pt-5 text-center" id="img-container"></Col>
           <Col md={8} className="p-5">
             <Row>
               <Col md={10} className="mb-5" id="trackList">
-                {searchResults &&
+                {loading ? (
+                  <div>Loading...</div>
+                ) : searchResults && searchResults.length > 0 ? (
                   searchResults.map((song) => (
                     <Card key={song.id} className="mb-3">
-                      <Card.Body>
-                        <Card.Title>{song.title}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">Artista: {song.artist.name}</Card.Subtitle>
-                        <Button onClick={() => handleLike(song.id)}>Mi Piace</Button>
-                      </Card.Body>
+                      <h3>{song.title}</h3>
                     </Card>
-                  ))}
+                  ))
+                ) : (
+                  <div>Nessun risultato trovato.</div>
+                )}
               </Col>
             </Row>
           </Col>
