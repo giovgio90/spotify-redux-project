@@ -1,16 +1,12 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { useSelector } from "react-redux"; // Rimuovi l'import di useDispatch
+import { useSelector, useDispatch } from "react-redux"; // Importa useSelector e useDispatch
 import SectionPlayer from "./SectionPlayer";
 import { useEffect } from "react";
+import { fetchMusic } from "../redux/actions/index";
 
 const Main = () => {
   const loading = useSelector((state) => state.music.loading);
-  const searchResults = useSelector((state) => state.music.searchResults); // Ottieni i risultati dalla store
-  const searchQuery = useSelector((state) => state.music.searchQuery);
-
-  useEffect(() => {
-    // La chiamata API è già gestita dal NavBar, quindi non è necessario fare nulla qui
-  }, [searchQuery]);
+  const searchResults = useSelector((state) => state.music.searchResults);
 
   return (
     <>

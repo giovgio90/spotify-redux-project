@@ -7,7 +7,7 @@ import { searchMusicSuccess } from "../redux/actions";
 
 const NavBar = () => {
   const [inputValue, setInputValue] = useState("");
-  const [setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch(); // Aggiungi l'import di useDispatch
 
   const handleSearch = async () => {
