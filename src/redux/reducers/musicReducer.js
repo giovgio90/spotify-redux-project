@@ -1,9 +1,10 @@
-import { SEARCH_MUSIC_SUCCESS, SEARCH_MUSIC_FAILURE, TOGGLE_LIKE } from "../actions";
+import { SEARCH_MUSIC_SUCCESS, SEARCH_MUSIC_FAILURE, SET_ALBUM, TOGGLE_LIKE } from "../actions";
 
 const initialState = {
   searchResults: [],
   likedSongs: [],
   loading: false,
+  content: [],
 };
 
 const musicReducer = (state = initialState, action) => {
@@ -21,6 +22,9 @@ const musicReducer = (state = initialState, action) => {
         searchResults: [],
         loading: false,
       };
+
+    case SET_ALBUM:
+      return { ...state, content: [...state.content, action.payload] };
 
     case TOGGLE_LIKE:
       const songId = action.payload;

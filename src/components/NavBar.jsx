@@ -1,14 +1,15 @@
-import { Container, Row, Col, Navbar, Nav, Button, FormControl } from "react-bootstrap";
+import { Container, Row, Col, Navbar, Nav, Button, FormControl, NavLink } from "react-bootstrap";
 import LogoSpotify from "../assets/logo/Spotify_Logo.png";
 import { HouseDoor, Book } from "react-bootstrap-icons";
 import { useState } from "react";
-import { useDispatch } from "react-redux"; // Aggiungi l'import di useDispatch
+import { useDispatch } from "react-redux";
 import { searchMusicSuccess } from "../redux/actions";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const [inputValue, setInputValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch(); // Aggiungi l'import di useDispatch
+  const [setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleSearch = async () => {
     setLoading(true);
@@ -24,7 +25,7 @@ const NavBar = () => {
       if (response.ok) {
         const data = await response.json();
         const songs = data.data;
-        dispatch(searchMusicSuccess(songs)); // Dispatch dell'azione per aggiornare lo stato Redux
+        dispatch(searchMusicSuccess(songs));
       } else {
         console.error("Errore nella ricerca delle canzoni. Stato della risposta:", response.status);
       }
@@ -48,15 +49,17 @@ const NavBar = () => {
             className="justify-content-between p-3"
           >
             <div className="nav-container">
-              <Navbar.Brand href="index.html">
-                <img src={LogoSpotify} alt="Spotify_Logo" width="140" height="42" className="my-3" />
-              </Navbar.Brand>
+              <Link to={"/"} style={{ textDecoration: "none" }} className="text-white">
+                <Navbar.Brand href="index.html">
+                  <img src={LogoSpotify} alt="Spotify_Logo" width="140" height="42" className="my-3" />
+                </Navbar.Brand>
+              </Link>
               <Navbar.Toggle aria-controls="navbarNavAltMarkup" />
               <Navbar.Collapse id="navbarNavAltMarkup">
                 <Nav className="navbar">
                   <ul className="mt-3">
                     <li>
-                      <Nav.Link href="index.html">
+                      <Nav.Link href="/">
                         <HouseDoor className="fas fa-home fa-lg" style={{ fontSize: "1.5rem" }} />
                         &nbsp; <span style={{ fontSize: "1.1rem" }}>Home</span>
                       </Nav.Link>
@@ -99,13 +102,17 @@ const NavBar = () => {
               <Button className="login-btn" type="button">
                 Login
               </Button>
-              {/* <Link to="/cookie-policy" className="link">
-                Cookie Policy
-              </Link>{" "}
-              |{" "}
-              <Link to="/privacy" className="link">
-                Privacy
-              </Link> */}
+              <Row className="text-center" style={{ fontSize: "0.9rem" }}>
+                <Col sm={6} className="d-flex w-100 justify-content-center">
+                  <NavLink to="/cookie-policy" className="link">
+                    Cookie Policy
+                  </NavLink>
+                  <span className="mx-2">|</span>
+                  <NavLink to="/privacy" className="link">
+                    Privacy
+                  </NavLink>
+                </Col>
+              </Row>
             </div>
           </Navbar>
         </Col>
