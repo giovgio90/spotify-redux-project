@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const [inputValue, setInputValue] = useState("");
-  const [setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleSearch = async () => {
